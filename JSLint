@@ -1,0 +1,149 @@
+#!/usr/bin/env node
+//v8.js
+/*global JSLINT require, process console*/
+/*jslint rhino: true, strict: false, onevar: false, white: false, browser: true,
+ laxbreak: true, undef: true, nomen: false, eqeqeq: true, plusplus: false, bitwise: true,regexp: true, newcap: true, immed: true
+*/
+
+var jslint_file,
+	argv				= process.argv,
+	jslint_file_name	= '.jslint_core',
+	sys					= require('util'),
+	fs					= require('fs'),
+	path				= require('path'),
+	core_path			= path.dirname(process.mainModule.filename),
+	jslint_file_path	= path.join(core_path, jslint_file_name),
+	simple				= false,
+	defaults			= {
+		bitwise:	true,	//	Allow bitwise operators
+		browser:	true,	//	Assume a browser ( http://www.JSLint.com/lint.html#browser )
+		css:		true,	//	Tolerate CSS workarounds ( http://www.JSLint.com/lint.html#css )
+		eqeqeq:		true,	//	Require `===` && `!==`
+		immed:		true,	//	Immediate invocations must be wrapped in parens.
+		laxbreak:	true,	//	Tolerate "sloppy" line breaks
+		newcap:		true,	//	Require initial caps for constructors ( http://www.JSLint.com/lint.html#new )
+		nomen:		false,	//	Allow dangling `_` in identifiers
+		onevar:		false,	//	Allow multiple `var` statements.
+		plusplus:	true,  //  Allow `++` and `--`
+		regexp:		true,	//	Disallow `.` and `[^...]` in regex
+		strict:		false,	//	Don't require `use strict;`
+		undef:		true,	//	Disallow undeclared variables ( http://www.JSLint.com/lint.html#undefined )
+		white:		true,	//	Don't apply strict whitespace rules
+		sloppy:		true,
+		forin:		true,
+		vars:		true,
+		'continue': true
+	};
+
+function init()
+{
+	var i;
+	
+	argv.shift();	// drop "node"
+	argv.shift();	// drop this script's name
+	
+	jslint_file = fs.readFileSync(jslint_file_path, 'utf8');
+	
+	eval(jslint_file);
+	
+	i = argv.indexOf('--list');
+	if(i !== -1)
+	{
+		simple = true;
+		argv.splice(i, 1);
+	}
+	
+	if(!argv[0])
+	{
+		sys.puts("\x1B[33mUsage: node JSLint [--list] file.js [file2.js file3.js ...]");
+		sys.puts("\x1B[33mUsage: ./JSLint [--list] file.js [file2.js file3.js ...]");
+		sys.puts("\x1B[33mUsage: ./JSLint [--list] *.js\n");
+		process.exit(1);
+	}
+	for(i = 0; i < argv.length; i++)
+	{
+		parseFile(JSLINT, argv[i]);
+	}
+	sys.puts('');
+}
+
+function parseFile(JSLINT, fileToParse)
+{
+	var e, i, data, defaults, numErrors;
+	
+	if(!path.existsSync(fileToParse))
+	{
+		sys.puts("\x1B[31mJSLint: Couldn't open file '" + fileToParse + "'.\n");
+		process.exit(1);
+	}
+		
+	data = fs.readFileSync(fileToParse);
+	
+	if ( !JSLINT( data.toString(), defaults ) )
+	{
+		sys.puts('>'+fileToParse+' -\x1B[31m '+JSLINT.errors.length+' problem(s) found\x1B[0m');
+		if(!simple)
+		{
+			sys.puts('');
+			for ( i = 0, numErrors = JSLINT.errors.length; i < numErrors; i += 1 )
+			{
+				e = JSLINT.errors[ i ];
+				if ( e )
+				{
+					sys.puts(
+						'	\x1B[33mLine ' + e.line + ', Column: ' +
+						e.character + ': ' + e.reason + '\x1B[0m'
+					);
+					sys.puts(
+						'	  '+( e.evidence || '' ).replace( /^\s+|\s+$/, "" )
+					);
+				}
+			}
+		}
+	}
+	else
+	{
+		sys.puts('>'+fileToParse+' -\x1B[32m No problems found\x1B[0m');
+		//process.exit( 0 );
+	}
+}
+
+sys.puts('');
+if(path.existsSync(jslint_file_path))
+{
+	init();
+}
+else
+{
+	var https = require('https'),
+		url = require('url'),
+		options = url.parse('https://raw.github.com/douglascrockford/JSLint/master/jslint.js'),
+		req;
+	
+	sys.puts('\x1B[31mJSLint base file\x1B[0m ('+jslint_file_name+') \x1B[31mnot exists\x1B[0m');
+	sys.puts('\x1B[31mDownloading JSLint from '+options.href+' ...\x1B[0m');
+	
+	
+	req = https.request(options, function(res)
+	{
+		//console.log('STATUS: ' + res.statusCode);
+		res.setEncoding('utf8');
+		
+		var data = '';
+		res.on('data', function (chunk) {
+			data += chunk;
+		});
+		res.on('end', function(){
+			sys.puts('\x1B[32mDownload completed\x1B[0m\n');
+			fs.writeFileSync(jslint_file_path, data, 'utf8');
+			init();
+		});
+	});
+	
+	req.on('error', function(e)
+	{
+		console.log('problem with request: ' + e.message);
+	});
+	
+	req.end();
+}
