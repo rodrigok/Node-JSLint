@@ -33,12 +33,11 @@
 	This script accept one option parameter (--list). With this parameter the script don't show the list of errors, only show a list of files that was passed and your status after the JSLint validation:
 	<pre>node JSLint --list tests/*.js</pre>
 	The return will be like this:
-	<pre>
+<pre>
 >tests/test1.js - 3 problem(s) found
 >tests/test2.js - No problems found
 >tests/test3.js - No problems found
->tests/test4.js - 2 problem(s) found
-	</pre>
+>tests/test4.js - 2 problem(s) found</pre>
 </p>
 
 <h1>First Time</h1>
