@@ -1,0 +1,19 @@
+{
+  "author": "Rodrigo K. Nascimento <rodrigoknascimento@gmail.com> (http://www.rodrigok.com/)",
+  "name": "JSLintCli",
+  "description": "JSLint implementation for command line",
+  "version": "0.0.2",
+  "homepage": "https://github.com/rodrigok/Node-JSLint",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rodrigok/Node-JSLint.git"
+  },
+  "engines": {
+    "node": "~0.6.5"
+  },
+  "bin": {
+    "JSLintCli": "JSLint"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

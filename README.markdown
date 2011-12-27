@@ -1,3 +1,20 @@
+<h1>Instalation</h1>
+<p>
+	This script don't require instalation, you only need download this files and execute as below.
+	If you has the NPM instaled you can install this script via NPM:
+	<ul>
+		<li>
+			Into your project:
+			<pre>npm install JSLintCli</pre>
+		</li>
+		<li>
+			As Global (Recomended):
+			<pre>sudo npm install JSLintCli -g</pre>
+			If you install as Global you need execute this script as SuperUser on the first time to download and install the core
+		</li>
+	</ul>
+</p>
+
 <h1>Usage</h1>
 <p>
 	There are 2 ways to execute this script:

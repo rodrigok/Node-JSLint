@@ -69,7 +69,7 @@ function init()
 
 function parseFile(JSLINT, fileToParse)
 {
-	var e, i, data, defaults, numErrors;
+	var e, i, data, numErrors;
 	
 	if(!path.existsSync(fileToParse))
 	{
