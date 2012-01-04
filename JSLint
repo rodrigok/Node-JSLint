@@ -55,9 +55,9 @@ function init()
 	
 	if(!argv[0])
 	{
-		sys.puts("\x1B[33mUsage: node JSLint [--list] file.js [file2.js file3.js ...]");
+		sys.puts("Usage: node JSLint [--list] file.js [file2.js file3.js ...]");
 		sys.puts("\x1B[33mUsage: ./JSLint [--list] file.js [file2.js file3.js ...]");
-		sys.puts("\x1B[33mUsage: ./JSLint [--list] *.js\n");
+		sys.puts("\x1B[33mUsage: ./JSLint [--list] *.js\033[0m\n");
 		process.exit(1);
 	}
 	for(i = 0; i < argv.length; i++)
