@@ -71,7 +71,7 @@ function parseFile(JSLINT, fileToParse)
 {
 	var e, i, data, numErrors;
 	
-	if(!path.existsSync(fileToParse))
+	if(!fs.existsSync(fileToParse))
 	{
 		sys.puts("\x1B[31mJSLint: Couldn't open file '" + fileToParse + "'.\n");
 		process.exit(1);
@@ -109,7 +109,7 @@ function parseFile(JSLINT, fileToParse)
 }
 
 sys.puts('');
-if(path.existsSync(jslint_file_path))
+if(fs.existsSync(jslint_file_path))
 {
 	init();
 }
