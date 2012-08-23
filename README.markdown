@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/rodrigok/Node-JSLint.png)](http://travis-ci.org/rodrigok/Node-JSLint)
 <h1>Instalation</h1>
 <p>
 	This script don't require instalation, you only need download this files and execute as below.
